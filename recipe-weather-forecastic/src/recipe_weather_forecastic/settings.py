@@ -24,9 +24,7 @@ HOOKS = (CredentialsHooks(), CheckpointHooks())
 # Comment the below line out if you do not wish for recipe usage analytics
 # to be reported to DR. No customer code or datasets are included in the
 # reported analytics.
-analytics_trace_id = None
-if analytics_trace_id is not None:
-    HOOKS = (AnalyticsHooks(analytics_trace_id),) + HOOKS
+HOOKS = (AnalyticsHooks("recipe-forecastic"),) + HOOKS
 
 # Installed plugins for which to disable hook auto-registration.
 # DISABLE_HOOKS_FOR_PLUGINS = ("kedro-viz",)
