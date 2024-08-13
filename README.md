@@ -16,7 +16,7 @@ Weather Forecastic allows users to track and predict their favorite cities' weat
    pip install kedro
    ```
    ```bash
-   kedro new -n --starter=https://github.com/j-beastman/WeatherForecastic.git --checkout master
+   kedro new --starter=https://github.com/j-beastman/WeatherForecastic.git --checkout master
    ```
    ```bash
    pip install -r your_project_name/requirements.txt
