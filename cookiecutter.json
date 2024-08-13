@@ -1,6 +1,6 @@
 {
     "project_name": null,
-    "analytics_trace_id": null,
+    "analytics_trace_id": "recipe-forecastic",
     "_comment_analytics_trace_id": "A non-null value for analytics_trace_id enables DataRobot to collect analytics for your recipe",
     "repo_name": "{{ cookiecutter.project_name.strip().replace(' ', '-').replace('_', '-').lower() }}",
     "python_package": "{{ cookiecutter.project_name.strip().replace(' ', '_').replace('-', '_').lower() }}",
