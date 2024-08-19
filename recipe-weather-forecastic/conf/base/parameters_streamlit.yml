@@ -1,9 +1,10 @@
 deploy_streamlit_app:
   prediction_dataset_name: ${globals:project_name} Time Series Data
+  base_environment_id: 6542cd582a9d3d51bf4ac71e
   custom_app_name: ${globals:project_name} Streamlit
   environment_name: ${globals:project_name} Streamlit Environment
   environment_use_cases:
-  - customApplication
+    - customApplication
   page_title: Weather Forecasting
   graph_y_axis: Increase in Views
   lower_bound_forecast_at_0: true

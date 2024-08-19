@@ -39,13 +39,14 @@ def prepare_yaml_content(*args: Any, **kwargs: Any) -> Union[Dict[str, Any], Lis
         return kwargs
 
 
-def get_or_create_execution_environment_version_with_secrets(
+def get_or_create_custom_application_source_version_with_secrets(
     endpoint: str,
     token: str,
     azure_endpoint: str,
     azure_api_key: str,
     azure_api_version: str,
-    execution_environment_id: str,
+    custom_application_source_id: str,
+    base_environment_id: str,
     secrets_template: str,
     app_assets: pathlib.Path,
 ) -> str:
@@ -67,8 +68,8 @@ def get_or_create_execution_environment_version_with_secrets(
     str :
         DataRobot id of the created or retrieved execution environment version
     """
-    from datarobotx.idp.execution_environment_versions import (
-        get_or_create_execution_environment_version,
+    from datarobotx.idp.custom_application_source_version import (
+        get_or_create_custom_application_source_version,
     )
 
     secrets_file = (
@@ -83,8 +84,12 @@ def get_or_create_execution_environment_version_with_secrets(
     with open(app_assets / ".streamlit/secrets.toml", "w") as f:
         f.write(secrets_file)
 
-    return get_or_create_execution_environment_version(
-        endpoint, token, execution_environment_id, app_assets
+    return get_or_create_custom_application_source_version(
+        endpoint=endpoint,
+        token=token,
+        custom_application_source_id=custom_application_source_id,
+        base_environment_id=base_environment_id,
+        folder_path=app_assets,
     )
 
 

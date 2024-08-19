@@ -1,4 +1,4 @@
-datarobot~=3.4.0
+datarobot==3.4.0
 openai==1.14.3
 plotly==5.18.0
 streamlit==1.31.1
