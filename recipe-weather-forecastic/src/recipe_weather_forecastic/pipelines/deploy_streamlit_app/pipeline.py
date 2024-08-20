@@ -8,13 +8,18 @@
 from kedro.pipeline import node, Pipeline
 from kedro.pipeline.modular_pipeline import pipeline
 from datarobotx.idp.use_cases import get_or_create_use_case
-from datarobotx.idp.custom_applications import get_replace_or_create_custom_app_from_env
-from datarobotx.idp.execution_environments import get_or_create_execution_environment
+from datarobotx.idp.custom_applications import get_replace_or_create_custom_app
+
+# from datarobotx.idp.execution_environments import get_or_create_execution_environment
+from datarobotx.idp.custom_application_source import (
+    get_or_create_custom_application_source,
+)
+
 from .nodes import (
     log_outputs,
     prepare_yaml_content,
     make_app_assets,
-    get_or_create_execution_environment_version_with_secrets,
+    get_or_create_custom_application_source_version_with_secrets,
     get_dataset_id,
 )
 
@@ -33,14 +38,14 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             name="make_app_execution_environment",
-            func=get_or_create_execution_environment,
+            func=get_or_create_custom_application_source,
             inputs={
                 "endpoint": "params:credentials.datarobot.endpoint",
                 "token": "params:credentials.datarobot.api_token",
                 "name": "params:environment_name",
-                "use_cases": "params:environment_use_cases",
+                # "use_cases": "params:environment_use_cases",
             },
-            outputs="app_execution_environment_id",
+            outputs="custom_application_source_id",
         ),
         node(
             name="get_prediction_dataset_id",
@@ -53,28 +58,28 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             name="make_app_execution_environment_version",
-            func=get_or_create_execution_environment_version_with_secrets,
+            func=get_or_create_custom_application_source_version_with_secrets,
             inputs={
                 "endpoint": "params:credentials.datarobot.endpoint",
                 "token": "params:credentials.datarobot.api_token",
                 "azure_endpoint": "params:credentials.azure_openai_llm_credentials.azure_endpoint",
                 "azure_api_key": "params:credentials.azure_openai_llm_credentials.api_key",
                 "azure_api_version": "params:credentials.azure_openai_llm_credentials.api_version",
-                "execution_environment_id": "app_execution_environment_id",
+                "custom_application_source_id": "custom_application_source_id",
+                "base_environment_id": "params:base_environment_id",
                 "secrets_template": "app_secrets",
                 "app_assets": "app_assets",
             },
-            outputs="execution_environment_version_id",
+            outputs="custom_application_source_version_id",
         ),
         node(
             name="deploy_app",
-            func=get_replace_or_create_custom_app_from_env,
+            func=get_replace_or_create_custom_app,
             inputs={
                 "endpoint": "params:credentials.datarobot.endpoint",
                 "token": "params:credentials.datarobot.api_token",
                 "name": "params:custom_app_name",
-                "environment_id": "app_execution_environment_id",
-                "env_version_id": "execution_environment_version_id",
+                "custom_application_source_version_id": "custom_application_source_version_id",
             },
             outputs="application_id",
         ),
@@ -163,5 +168,5 @@ def create_pipeline(**kwargs) -> Pipeline:
             "recommended_model_id",
             "deployment_id",
         },
-        outputs={"application_id", "app_execution_environment_id"},
+        outputs={"application_id", "custom_application_source_version_id"},
     )

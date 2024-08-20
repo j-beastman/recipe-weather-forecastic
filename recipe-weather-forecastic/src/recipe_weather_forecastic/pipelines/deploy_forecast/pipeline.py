@@ -64,7 +64,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             name="get_recommended_model",
-            func=lambda project_id: dr.ModelRecommendation.get(project_id).model_id,
+            func=lambda project_id: dr.Project.get(project_id).get_top_model().id,
             inputs="project_id",
             outputs="recommended_model_id",
         ),
